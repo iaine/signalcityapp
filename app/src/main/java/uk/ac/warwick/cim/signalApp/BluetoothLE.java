@@ -116,7 +116,7 @@ public class BluetoothLE {
                             + "\n";
                 }
                     signalTone.playTone();
-                    writeData(data);
+                    //writeData(data);
                 }
             };
 
