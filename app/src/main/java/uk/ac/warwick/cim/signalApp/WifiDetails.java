@@ -34,9 +34,12 @@ public class WifiDetails {
 
     private WifiRttManager wifiRttManager;
 
-    public WifiDetails(File fName) {
+    private SoundState snd;
+
+    public WifiDetails(File fName, SoundState sound) {
         this.context = context;
         fileName = fName;
+        snd = sound;
         this.initWifiDetails();
     }
 
@@ -138,6 +141,7 @@ public class WifiDetails {
                             }
                         });
                     } else {
+                        Log.i("WiFiRTT", "No ranging");
                     }
                 }
             };

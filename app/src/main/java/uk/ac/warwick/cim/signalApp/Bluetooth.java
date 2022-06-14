@@ -2,13 +2,11 @@ package uk.ac.warwick.cim.signalApp;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.content.Intent;
-import android.media.midi.MidiManager;
 import android.os.Handler;
 import android.util.Log;
 import android.content.Context;
@@ -21,7 +19,7 @@ import java.io.File;
  */
 
 
-public class BluetoothLE {
+public class Bluetooth {
 
     private static final String TAG = "BLUETOOTH";
 
@@ -41,15 +39,12 @@ public class BluetoothLE {
 
     public Tone signalTone;
 
-    private SoundState snd;
-
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 2000;
 
-    public BluetoothLE(File fileName, Tone tone, SoundState sound) {
+    public BluetoothLE(File fileName, Tone tone) {
         fName = fileName;
         signalTone = tone;
-        snd = sound;
         this.initBluetoothDetails();
     }
 
@@ -100,36 +95,33 @@ public class BluetoothLE {
                     //test for APIs. If less than 26, we lose some fields.
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                         data = System.currentTimeMillis()
-                            + ", " + result.getDevice()
-                            + ", " + result.getRssi()
-                            + ", " + result.getPrimaryPhy()
-                            + ", " + result.getSecondaryPhy()
-                            + ", " + result.getPeriodicAdvertisingInterval()
-                            + ", " + details.getDeviceName()
-                            + ", " + details.getManufacturerSpecificData().toString()
-                            + ", " + details.getTxPowerLevel()
-                            + ", " + details.getAdvertiseFlags()
-                            + "\n";
+                                + ", " + result.getDevice()
+                                + ", " + result.getRssi()
+                                + ", " + result.getPrimaryPhy()
+                                + ", " + result.getSecondaryPhy()
+                                + ", " + result.getPeriodicAdvertisingInterval()
+                                + ", " + details.getDeviceName()
+                                + ", " + details.getManufacturerSpecificData().toString()
+                                + ", " + details.getTxPowerLevel()
+                                + ", " + details.getAdvertiseFlags()
+                                + "\n";
                         //@todo: check other distance metric results
                         Log.i(TAG, "RSSI :" + result.getRssi() + " tX " + details.getTxPowerLevel());
                         Log.i(TAG, "details :" + signalTone.getDistance(result.getRssi()));
                         signalTone.playTone(signalTone.getDistance(result.getRssi()));
                     } else {
                         data = System.currentTimeMillis()
-                            + ", " + result.getDevice()
-                            + ", " + result.getRssi()
-                            + ", " + details.getDeviceName()
-                            + ", " + details.getManufacturerSpecificData().toString()
-                            + ", " + details.getTxPowerLevel()
-                            + ", " + details.getAdvertiseFlags()
-                            + "\n";
+                                + ", " + result.getDevice()
+                                + ", " + result.getRssi()
+                                + ", " + details.getDeviceName()
+                                + ", " + details.getManufacturerSpecificData().toString()
+                                + ", " + details.getTxPowerLevel()
+                                + ", " + details.getAdvertiseFlags()
+                                + "\n";
                         signalTone.playTone();
-                }
-                    //writeData(data);
-                    if (snd.getState() == SoundState.SoundStates.MIDI) {
-
                     }
-
+                    //signalTone.playTone();
+                    //writeData(data);
                 }
             };
 
@@ -142,4 +134,5 @@ public class BluetoothLE {
     }
 
 }
+
 

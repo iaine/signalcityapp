@@ -19,7 +19,7 @@ public class Tone {
     private final int toneduration = 44100;
 
 
-    protected Tone() {
+    public Tone() {
         this.mSound = new double[4410];
         this.mBuffer = new short[toneduration];
         // AudioTrack definition
@@ -66,5 +66,80 @@ public class Tone {
         mAudioTrack.release();
     }
 
+    /**
+     * Method to play the tone when a signal is found.
+     * Using a
+     */
+    public void playTone(double distance) {
+        int mBufferSize = AudioTrack.getMinBufferSize(44100,
+                AudioFormat.CHANNEL_OUT_MONO,
+                AudioFormat.ENCODING_PCM_8BIT);
 
+        AudioTrack mAudioTrack =  new AudioTrack(AudioManager.STREAM_MUSIC, 44100,
+                AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT,
+                mBufferSize, AudioTrack.MODE_STREAM);
+
+
+        mAudioTrack.play();
+
+        mAudioTrack.write(this.mBuffer, 0, this.mSound.length);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Log.i("BLUEZ", "Str distance" + distance);
+            Log.i("BLUEZ", "max " + AudioTrack.getMaxVolume());
+            mAudioTrack.setVolume((float) distance);
+        }
+
+        mAudioTrack.stop();
+        mAudioTrack.release();
+    }
+
+    public double setVolume(int rssi, int txPower) {
+
+        double currentDistance = this.getDistance(rssi,txPower);
+
+        //Audio Volume is capped at 1. Farther away is quieter
+        double volume = 1.0 - (currentDistance/10.0);
+
+        //set a floor so that we can hear something for a device.
+        if (volume < 0.1) volume = 0.1;
+
+        return volume;
+    }
+
+    /**
+     * Function to get distance of the device from the app
+     * to the RSSI and txPower parts.
+     *
+     * It does assume a straight line and no walls or signal drop outs.
+     *
+     * @param rssi
+     * @param txPower
+     * @return
+     */
+    public double getDistance(int rssi, int txPower) {
+        /*
+         * RSSI = TxPower - 10 * n * lg(d)
+         * n = 2 (in free space)
+         *
+         * d = 10 ^ ((TxPower - RSSI) / (10 * n))
+         */
+
+        return Math.pow(10d, ((double) txPower - (rssi)) / (10 * 2));
+    }
+
+    public double getDistance(int rssi) {
+        /*
+         * RSSI = TxPower - 10 * n * lg(d)
+         * n = 2 (in free space)
+         *
+         * d = 10 ^ ((TxPower - RSSI) / (10 * n))
+         */
+
+        if (rssi > 0) {
+            return 1 * ((double) rssi / 100.0);
+        }
+
+        return 1 * (-((double) rssi) / 100.0);
+    }
 }
