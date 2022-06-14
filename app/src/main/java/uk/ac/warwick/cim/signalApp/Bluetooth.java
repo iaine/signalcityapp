@@ -31,7 +31,7 @@ public class Bluetooth {
 
     private BluetoothAdapter bluetoothAdapter;
 
-    private BluetoothLeScanner bluetoothLeScanner;
+    private BluetoothScanner bluetoothLeScanner;
 
     private boolean scanning;
 
@@ -42,7 +42,7 @@ public class Bluetooth {
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 2000;
 
-    public BluetoothLE(File fileName, Tone tone) {
+    public Bluetooth (File fileName, Tone tone) {
         fName = fileName;
         signalTone = tone;
         this.initBluetoothDetails();
