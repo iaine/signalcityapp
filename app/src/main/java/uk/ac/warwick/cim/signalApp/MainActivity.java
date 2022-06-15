@@ -121,12 +121,17 @@ public class MainActivity extends AppCompatActivity {
         MidiDeviceInfo[] infos = midiManager.getDevices();
 
         for (MidiDeviceInfo info: infos) {
+
+            /*
+            Commented out for now. But worth storing for sensing work?
+
             int numInputs = info.getInputPortCount();
             int numOutputs = info.getOutputPortCount();
             Bundle properties = info.getProperties();
             String manufacturer = properties
                     .getString(MidiDeviceInfo.PROPERTY_MANUFACTURER);
 
+             */
 
 
             midiManager.openDevice(info, device -> {
