@@ -110,10 +110,10 @@ public class MainActivity extends AppCompatActivity {
         // refactor to .equals() not ==
         if (sound.getState().equals(SoundState.SoundStates.TONES)) {
             sound.setState(SoundState.SoundStates.MIDI);
-            Toast.makeText(this, "Using Midi", Toast.LENGTH_LONG);
+            Toast.makeText(this, "Using Midi", Toast.LENGTH_LONG).show();
         } else {
             sound.setState(SoundState.SoundStates.TONES);
-            Toast.makeText(this, "Using Tones", Toast.LENGTH_LONG);
+            Toast.makeText(this, "Using Tones", Toast.LENGTH_LONG).show();
         }
     }
 
