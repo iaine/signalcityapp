@@ -107,9 +107,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void changeSound (View view) {
-        //todo: refactor to state
-
-        if (sound.getState() == SoundState.SoundStates.TONES) {
+        // refactor to .equals() not ==
+        if (sound.getState().equals(SoundState.SoundStates.TONES)) {
             sound.setState(SoundState.SoundStates.MIDI);
             Toast.makeText(this, "Using Midi", Toast.LENGTH_LONG);
         } else {
