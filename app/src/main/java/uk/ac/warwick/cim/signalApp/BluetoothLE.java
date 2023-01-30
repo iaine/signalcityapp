@@ -7,6 +7,7 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.content.Context;
@@ -91,31 +92,35 @@ public class BluetoothLE {
                 public void onScanResult(int callbackType, ScanResult result) {
                     super.onScanResult(callbackType, result);
                     ScanRecord details = result.getScanRecord();
-                    String data;
+                    String data = System.currentTimeMillis()
+                            + ", " + result.getDevice()
+                            + ", " + result.getRssi()
+                            + ", " + details.getDeviceName()
+                            + ", " + details.getManufacturerSpecificData().toString()
+                            + ", " + details.getTxPowerLevel()
+                            + ", " + details.getServiceUuids().size()
+                            + ", " + details.getAdvertiseFlags();
+
                     //test for APIs. If less than 26, we lose some fields.
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        data = System.currentTimeMillis()
-                            + ", " + result.getDevice()
-                            + ", " + result.getRssi()
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        data += ", " + result.getPeriodicAdvertisingInterval()
                             + ", " + result.getPrimaryPhy()
-                            + ", " + result.getSecondaryPhy()
-                            + ", " + result.getPeriodicAdvertisingInterval()
-                            + ", " + details.getDeviceName()
-                            + ", " + details.getManufacturerSpecificData().toString()
-                            + ", " + details.getTxPowerLevel()
-                            + ", " + details.getAdvertiseFlags()
-                            + "\n";
-                    } else {
-                        data = System.currentTimeMillis()
-                            + ", " + result.getDevice()
-                            + ", " + result.getRssi()
-                            + ", " + details.getDeviceName()
-                            + ", " + details.getManufacturerSpecificData().toString()
-                            + ", " + details.getTxPowerLevel()
-                            + ", " + details.getAdvertiseFlags()
-                            + "\n";
-                }
-                    signalTone.playTone();
+                            + ", " + result.getSecondaryPhy();
+
+                    }
+                    int serviceOffered = details.getServiceUuids().size();
+
+                    data = data + "\n";
+                    //String freq = "A4";
+                    //test for the distance call being set.
+                    boolean distance = false;
+                    //signalTone.playTone(freq, distance);
+
+                    signalTone.playTone("C4", distance);
+                    signalTone.playTone("G4", distance);
+                    if (serviceOffered > 0) {
+                        signalTone.playTone("C5", distance);
+                    }
                     //writeData(data);
                 }
             };
