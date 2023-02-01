@@ -9,11 +9,13 @@ import android.bluetooth.le.ScanResult;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
+import android.os.ParcelUuid;
 import android.util.Log;
 import android.content.Context;
 
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Check the API levels in the App?
@@ -43,6 +45,10 @@ public class BluetoothLE {
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 2000;
 
+    private Repetition repetition;
+
+    private Models model;
+
     public BluetoothLE(File fileName, Tone tone) {
         fName = fileName;
         signalTone = tone;
@@ -57,6 +63,10 @@ public class BluetoothLE {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             ((Activity) mContext).startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
+
+        repetition = new Repetition();
+
+        model = new Models();
 
         this.scanLeDevice();
 
@@ -92,13 +102,13 @@ public class BluetoothLE {
                 public void onScanResult(int callbackType, ScanResult result) {
                     super.onScanResult(callbackType, result);
                     ScanRecord details = result.getScanRecord();
+                    Log.i("phoned", details.toString());
                     String data = System.currentTimeMillis()
                             + ", " + result.getDevice()
                             + ", " + result.getRssi()
                             + ", " + details.getDeviceName()
                             + ", " + details.getManufacturerSpecificData().toString()
                             + ", " + details.getTxPowerLevel()
-                            + ", " + details.getServiceUuids().size()
                             + ", " + details.getAdvertiseFlags();
 
                     //test for APIs. If less than 26, we lose some fields.
@@ -108,7 +118,12 @@ public class BluetoothLE {
                             + ", " + result.getSecondaryPhy();
 
                     }
-                    int serviceOffered = details.getServiceUuids().size();
+                    int serviceOffered = 0;
+
+                    if (details.getServiceUuids() != null) {
+                        serviceOffered = details.getServiceUuids().size();
+                        data += ", " + details.getServiceUuids().size();
+                    }
 
                     data = data + "\n";
                     //String freq = "A4";
@@ -116,14 +131,48 @@ public class BluetoothLE {
                     boolean distance = false;
                     //signalTone.playTone(freq, distance);
 
-                    signalTone.playTone("C4", distance);
-                    signalTone.playTone("G4", distance);
-                    if (serviceOffered > 0) {
-                        signalTone.playTone("C5", distance);
+                    //test for covid id here
+                    if (serviceID(details).toLowerCase().contains("fdf6")) {
+                        //signalTone.playTone("A2", distance);
+                        model.covidBeaconModel();
+                    } else {
+                        //this is models
+                        /*signalTone.playTone("C4", distance);
+                        signalTone.playTone("G4", distance);
+                        if (serviceOffered > 0) {
+                            signalTone.playTone("C5", distance);
+                        }*/
+                        model.inLoopModel(distance, serviceOffered);
+
+                        /*Integer idx = repetition.checkRepetition(result.getDevice());
+                        if (idx >= 1) {
+                            signalTone.playTone("A3", distance);
+                        }*/
+                        model.checkRepetition(repetition, result);
                     }
                     //writeData(data);
                 }
             };
+
+    private  String serviceID (ScanRecord r) {
+        String serviceUid = "No service";
+        List<ParcelUuid> uids =  r.getServiceUuids();
+
+        if (uids != null) {
+
+            //List<ParcelUuid> uids = serviceID(details);
+            StringBuilder ids = new StringBuilder();
+            for (ParcelUuid pUid: uids) {
+                serviceUid = pUid.getUuid().toString();
+
+                ids.append(pUid.getUuid().toString() + ",");
+                Log.i(TAG, "UUID " + serviceUid + " file " + pUid.describeContents());
+            }
+            serviceUid = ids.toString().replaceAll(",$", "");;
+        }
+    Log.i("phoned", serviceUid);
+        return serviceUid;
+    }
 
     private void writeData (String data) {
         try {
