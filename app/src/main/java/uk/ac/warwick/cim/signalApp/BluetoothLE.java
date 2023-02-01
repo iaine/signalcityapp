@@ -126,29 +126,17 @@ public class BluetoothLE {
                     }
 
                     data = data + "\n";
-                    //String freq = "A4";
+
                     //test for the distance call being set.
                     boolean distance = false;
-                    //signalTone.playTone(freq, distance);
 
                     //test for covid id here
                     if (serviceID(details).toLowerCase().contains("fdf6")) {
-                        //signalTone.playTone("A2", distance);
-                        model.covidBeaconModel();
+                        model.covidBeaconModel(signalTone);
                     } else {
-                        //this is models
-                        /*signalTone.playTone("C4", distance);
-                        signalTone.playTone("G4", distance);
-                        if (serviceOffered > 0) {
-                            signalTone.playTone("C5", distance);
-                        }*/
-                        model.inLoopModel(distance, serviceOffered);
-
-                        /*Integer idx = repetition.checkRepetition(result.getDevice());
-                        if (idx >= 1) {
-                            signalTone.playTone("A3", distance);
-                        }*/
-                        model.checkRepetition(repetition, result);
+                        //todo Add in way to change models.
+                        model.inLoopModel(signalTone, distance, serviceOffered);
+                        model.checkRepetition(signalTone, repetition, result);
                     }
                     //writeData(data);
                 }
