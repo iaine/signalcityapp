@@ -7,13 +7,11 @@ import androidx.lifecycle.ReportFragment;
 
 public class Models {
 
-    Tone signalTone;
-
     /**
      * Function to sonify the Covid model
      *
      */
-    public void covidBeaconModel () {
+    public void covidBeaconModel (Tone signalTone) {
         signalTone.playTone("A2", false);
     }
 
@@ -22,7 +20,7 @@ public class Models {
      * of in or out of the loop.
      * @param distance
      */
-    public void inLoopModel (boolean distance, Integer serviceOffered) {
+    public void inLoopModel (Tone signalTone, boolean distance, Integer serviceOffered) {
         signalTone.playTone("C4", distance);
         signalTone.playTone("G4", distance);
 
@@ -38,7 +36,7 @@ public class Models {
      * @param repetition
      * @param result
      */
-    public void checkRepetition (Repetition repetition, ScanResult result) {
+    public void checkRepetition (Tone signalTone, Repetition repetition, ScanResult result) {
         Integer idx = repetition.checkRepetition(result.getDevice());
         if (idx >= 1) {
             signalTone.playTone("A3", false);
