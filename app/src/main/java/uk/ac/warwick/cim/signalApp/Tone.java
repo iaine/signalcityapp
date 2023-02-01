@@ -29,6 +29,7 @@ public class Tone {
         // AudioTrack definition
         //this.createTone(440, toneduration);
         tones.put("A2", this.createTone(116, toneduration));
+        tones.put("A3", this.createTone(220, toneduration));
         tones.put("C4", this.createTone(261.63 , toneduration));
         tones.put("G4", this.createTone(392 , toneduration));
         tones.put("C5", this.createTone(523.25 , toneduration));
@@ -68,13 +69,13 @@ public class Tone {
                 AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT,
                 mBufferSize, AudioTrack.MODE_STREAM);
 
-
         mAudioTrack.play();
 
         short[] lBuffer = tones.get(freq);
         mAudioTrack.write(lBuffer, 0, this.mSound.length);
 
         if (distance && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //@todo change to the RSSI/TX
             mAudioTrack.setVolume(AudioTrack.getMaxVolume());
         }
         mAudioTrack.stop();
