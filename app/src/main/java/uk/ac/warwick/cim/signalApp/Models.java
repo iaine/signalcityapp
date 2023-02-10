@@ -3,8 +3,6 @@ package uk.ac.warwick.cim.signalApp;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanResult;
 
-import androidx.lifecycle.ReportFragment;
-
 public class Models {
 
     /**
