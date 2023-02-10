@@ -121,12 +121,14 @@ public class BluetoothLE {
                     int serviceOffered = 0;
 
                     if (details.getServiceUuids() != null) {
-                        serviceOffered = details.getServiceUuids().size();
-                        data += ", " + details.getServiceUuids().size();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            serviceOffered = details.getServiceSolicitationUuids().size();
+                        }
+
                     }
+                    data += ", " + serviceOffered;
 
                     data = data + "\n";
-
                     //test for the distance call being set.
                     boolean distance = false;
 
@@ -138,7 +140,7 @@ public class BluetoothLE {
                         model.inLoopModel(signalTone, distance, serviceOffered);
                         model.checkRepetition(signalTone, repetition, result);
                     }
-                    //writeData(data);
+                    writeData(data);
                 }
             };
 
