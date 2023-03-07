@@ -49,9 +49,12 @@ public class BluetoothLE {
 
     private Models model;
 
-    public BluetoothLE(File fileName, Tone tone) {
+    private ModelState mState;
+
+    public BluetoothLE(File fileName, Tone tone, ModelState modelState) {
         fName = fileName;
         signalTone = tone;
+        mState = modelState;
         this.initBluetoothDetails();
     }
 
@@ -130,17 +133,27 @@ public class BluetoothLE {
 
                     data = data + "\n";
                     //test for the distance call being set.
-                    boolean distance = false;
+                    boolean distance = mState.distance;
 
-                    //test for covid id here
-                    if (serviceID(details).toLowerCase().contains("fdf6")) {
-                        model.covidBeaconModel(signalTone);
-                    } else {
-                        //todo Add in way to change models.
+                    if (mState.covid) {
+                        //test for covid id here
+                        if (serviceID(details).toLowerCase().contains("fdf6")) {
+                            model.covidBeaconModel(signalTone);
+                        }
+                    }
+                    if (mState.inLoop) {
                         model.inLoopModel(signalTone, distance, serviceOffered);
+                    }
+
+                    if (mState.outLoop) {
+                        model.inLoopModel(signalTone, distance, serviceOffered);
+                    }
+
+                    if (mState.repetition) {
                         model.checkRepetition(signalTone, repetition, result);
                     }
-                    writeData(data);
+
+                    //writeData(data);
                 }
             };
 

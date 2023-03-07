@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                  * Open the companies file here and pass through.
                  * Use to sonify and to get any new data.
                  */
-                new BluetoothLE(signalFile, tone);
+                new BluetoothLE(signalFile, tone, modelState);
                 handler.postDelayed(this, 5000);
             }
         };
