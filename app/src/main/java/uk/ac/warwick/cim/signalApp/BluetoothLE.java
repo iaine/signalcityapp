@@ -135,6 +135,8 @@ public class BluetoothLE {
                     //test for the distance call being set.
                     boolean distance = mState.distance;
 
+                    model.presenceModel(signalTone);
+
                     if (mState.covid) {
                         //test for covid id here
                         if (serviceID(details).toLowerCase().contains("fdf6")) {
@@ -142,11 +144,13 @@ public class BluetoothLE {
                         }
                     }
                     if (mState.inLoop) {
-                        model.inLoopModel(signalTone, distance, serviceOffered);
+                        if (serviceOffered > 0) {
+                            model.inLoopModel(signalTone, distance);
+                        }
                     }
 
                     if (mState.outLoop) {
-                        model.inLoopModel(signalTone, distance, serviceOffered);
+                        model.outLoopModel(signalTone, distance);
                     }
 
                     if (mState.repetition) {
