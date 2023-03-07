@@ -10,7 +10,7 @@ public class Repetition {
         this.repeat = new ArrayList();
     }
 
-    private void add (String device) {
+    private void addDevice (String device) {
         if (this.repeat.size() == 100) {
             this.repeat.remove(0);
         }
@@ -22,10 +22,10 @@ public class Repetition {
         return idx;
     }
 
-    public Integer checkRepetition (BluetoothDevice device) {
-        String dev = device.getAddress().toString();
-        Integer idx = this.lastIndex(dev);
-        this.add(dev);
+    public Integer checkRepetition (String device) {
+        //String dev = device.getAddress().toString();
+        Integer idx = this.lastIndex(device);
+        this.addDevice(device);
         return idx;
     }
 }

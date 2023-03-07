@@ -35,7 +35,8 @@ public class Models {
      * @param result
      */
     public void checkRepetition (Tone signalTone, Repetition repetition, ScanResult result) {
-        Integer idx = repetition.checkRepetition(result.getDevice());
+        String device = result.getDevice().toString();
+        Integer idx = repetition.checkRepetition(device);
         if (idx >= 1) {
             signalTone.playTone("A3", false);
         }
