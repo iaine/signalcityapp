@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Tone tone = new Tone();
 
+    private ModelState modelState = new ModelState();
+
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,5 +124,28 @@ public class MainActivity extends AppCompatActivity {
         return fName;
     }
 
+    public void repetitionModel () {
+        boolean state = (!modelState.repetition) ? true : false;
+        modelState.changeState("repetition", state);
+    }
+
+    public void distantModel () {
+        boolean state = (!modelState.distance) ? true : false;
+        modelState.changeState("distance", state);
+    }
+
+    public void covidModel () {
+        boolean state = (!modelState.covid) ? true : false;
+        modelState.changeState("covid", state);
+    }
+
+    public void inLoopModel () {
+        boolean state = (!modelState.inLoop) ? true : false;
+        modelState.changeState("inloop", state);
+    }
+    public void outLoopModel () {
+        boolean state = (!modelState.outLoop) ? true : false;
+        modelState.changeState("outloop", state);
+    }
 
 }
