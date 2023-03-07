@@ -5,9 +5,6 @@ package uk.ac.warwick.cim.signalApp;
  */
 public class ModelState {
 
-    protected ModelState() {
-
-    }
 
     public boolean inLoop = false;
 
@@ -16,6 +13,8 @@ public class ModelState {
     public boolean distance = false;
 
     public boolean repetition = false;
+
+    public boolean covid = false;
 
     /**
      * Change the state of the model type
@@ -35,6 +34,9 @@ public class ModelState {
                 break;
             case "repetition":
                 this.repetition = flag;
+                break;
+            case "covid":
+                this.covid = flag;
                 break;
             default:
                 break;
