@@ -10,13 +10,13 @@ public class RepetitionUnitTest {
     public void check_Empty_Repetition() {
         Repetition repetition = new Repetition();
         Integer idx = repetition.checkRepetition("A4:54:23:cd");
-        assert(idx == -1);
+        assertEquals(-1, idx.intValue());
     }
     @Test
     public void check_Repetition() {
         Repetition repetition = new Repetition();
         repetition.checkRepetition("A4:54:23:cd");
         Integer idx = repetition.checkRepetition("A4:54:23:cd");
-        assert(idx == 0);
+        assertEquals(0, idx.intValue());
     }
 }
